@@ -9,7 +9,7 @@ import buildToTestLab.Date;
 public class DateSetDateTest {
 
 	@Test
-	public void test() {
+	public void testSetDate() {
 		Date d1 = new Date(); // sets date to 01/01/1000
 		Date d2 = new Date(); 
 		Date d3 = new Date();

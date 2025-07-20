@@ -43,18 +43,18 @@ public class Date
         year = aDate.year;
     }
 
-    public void setDate(int monthInt, int day, int year)
+    public Date setDate(int monthInt, int day, int year)
     {
         if (dateOK(monthInt, day, year))
         {
             this.month = monthString(monthInt);
             this.day = day;
             this.year = year;
+            return this;
         }
         else
         {
-            System.out.println("Fatal Error in setDate(int, int, int)");
-            System.exit(0);
+            return null;
         }
     }
 
@@ -159,10 +159,15 @@ public class Date
         return (month + " " + day + ", " + year);
     }
 
-    public boolean equals(Date otherDate)
-    {
-        return ( (month.equals(otherDate.month))
-                  && (day == otherDate.day) && (year == otherDate.year) );
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Date otherDate = (Date) obj;
+        return this.day == otherDate.day &&
+               this.year == otherDate.year &&
+               this.month.equals(otherDate.month);
     }
 
     public boolean precedes(Date otherDate)
@@ -254,8 +259,34 @@ public class Date
     }
     
     public Date addOneDay() {
-    	System.out.println("Date.addOneDay() is not yet implemented.");
-		return new Date();
+        int daysInMonth = 0;
+
+        switch (this.getMonth()) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                daysInMonth = 31;
+                break;
+            case 4: case 6: case 9: case 11:
+                daysInMonth = 30;
+                break;
+            case 2:
+                daysInMonth = 28;
+                break;
+            default:
+                System.out.println("Fatal Error in addOneDay: Invalid month");
+        }
+        
+        if (this.getDay() < daysInMonth) {
+            this.setDay(this.getDay() + 1);
+        } else {
+            this.setDay(1);;
+            if (this.getMonth() < 12) {
+                this.setMonth(this.getMonth() + 1);
+            } else {
+                this.setMonth(1);
+                this.setYear(this.getYear() + 1);
+            }
+        }
+        return this;
     }
     
     public static void main(String[] args) {
